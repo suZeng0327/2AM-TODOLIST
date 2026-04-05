@@ -4,6 +4,8 @@ let history = JSON.parse(localStorage.getItem('history')) || {};
 const input = document.getElementById('todo-input');
 const list = document.getElementById('todo-list');
 const historyContent = document.getElementById('history-content');
+// 리셋하고 싶은 시간을 숫자로 적으세요 (예: 0 = 자정, 12 = 정오, 2 = 새벽 2시)
+const RESET_HOUR = 23; // <--- 여기서 시간을 바꿉니다! (지금은 0시 리셋)
 
 // --- 1. 드래그 앤 드롭 설정 (SortableJS) ---
 const sortable = new Sortable(list, {
@@ -18,16 +20,14 @@ const sortable = new Sortable(list, {
     }
 });
 
-// --- 2. 3 AM 리셋 로직 ---
 function checkAndReset() {
     const now = new Date();
     const lastReset = localStorage.getItem('lastReset');
     
     let resetTime = new Date();
-    resetTime.setHours(3, 0, 0, 0);
+    resetTime.setHours(RESET_HOUR, 0, 0, 0);
 
-    // 새벽 0~3시 사이라면 '어제의 3시'가 기준점임
-    if (now.getHours() < 3) {
+    if (now.getHours() < RESET_HOUR) {
         resetTime.setDate(resetTime.getDate() - 1);
     }
 
