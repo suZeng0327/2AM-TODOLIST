@@ -11,16 +11,42 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: 'Segoe UI', sans-serif;
-    display: flex;
-    justify-content: center;
     margin: 0;
-    height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center; /* 가로 중앙 정렬 */
+}
+
+/* 추가된 레이아웃 그룹 */
+.main-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px; /* 광고와 투두리스트 사이의 간격 */
+    padding-top: 2rem;
+}
+
+/* 광고 스타일 */
+.ad-left {
+    width: 160px;
+    height: 600px;
+    position: sticky; /* 스크롤을 내려도 광고가 따라옴 */
+    top: 2rem;
 }
 
 .container {
     width: 100%;
     max-width: 500px;
-    padding: 2rem;
+    /* padding 제거: wrapper에서 처리 */
+}
+
+/* 화면 너비가 850px 이하일 경우 광고를 숨김 (반응형) */
+@media (max-width: 850px) {
+    .ad-left {
+        display: none;
+    }
+    .main-wrapper {
+        padding: 0 1rem;
+    }
 }
 
 header {
@@ -62,7 +88,6 @@ header {
 
 .todo-item.completed { opacity: 0.4; }
 
-/* 드래그 핸들 (☰) */
 .drag-handle {
     cursor: grab;
     color: #555;
@@ -89,11 +114,9 @@ button {
 .btn-pin.active { color: #ff9800; }
 .btn-delete:hover { color: var(--danger-color); }
 
-/* 드래그 애니메이션 관련 */
-.sortable-ghost { opacity: 0; } /* 이동할 자리를 비워둠 */
+.sortable-ghost { opacity: 0; }
 .sortable-chosen { background: #333 !important; }
 
-/* 사이드바 */
 .sidebar {
     position: fixed;
     right: -400px;

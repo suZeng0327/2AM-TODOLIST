@@ -5,7 +5,7 @@ const input = document.getElementById('todo-input');
 const list = document.getElementById('todo-list');
 const historyContent = document.getElementById('history-content');
 // 리셋하고 싶은 시간을 숫자로 적으세요 (예: 0 = 자정, 12 = 정오, 2 = 새벽 2시)
-const RESET_HOUR = 23; // <--- 여기서 시간을 바꿉니다! (지금은 0시 리셋)
+const RESET_HOUR = 3; // <--- 여기서 시간을 바꿉니다! (지금은 0시 리셋)
 
 // --- 1. 드래그 앤 드롭 설정 (SortableJS) ---
 const sortable = new Sortable(list, {

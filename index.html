@@ -10,17 +10,27 @@
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>오전 3시마다 리셋되는 todo-list</h1>
-            <button id="history-btn" title="기록 보기"><i class="fas fa-history"></i></button>
-        </header>
+    <div class="main-wrapper">
+        <aside class="ad-left">
+            <ins class="kakao_ad_area" style="display:none;"
+                data-ad-unit="DAN-WFfc3EQNjLZLKOBu"
+                data-ad-width="160"
+                data-ad-height="600"></ins>
+            <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
+        </aside>
 
-        <div class="input-section">
-            <input type="text" id="todo-input" placeholder="할 일을 입력하고 엔터를 누르세요..." autocomplete="off">
+        <div class="container">
+            <header>
+                <h1>오전3시마다 리셋되는 todo-list</h1>
+                <button id="history-btn" title="기록 보기"><i class="fas fa-history"></i></button>
+            </header>
+
+            <div class="input-section">
+                <input type="text" id="todo-input" placeholder="할 일을 입력하고 엔터를 누르세요..." autocomplete="off">
+            </div>
+
+            <ul id="todo-list"></ul>
         </div>
-
-        <ul id="todo-list"></ul>
     </div>
 
     <div id="history-sidebar" class="sidebar">
