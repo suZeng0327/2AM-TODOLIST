@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3AM Reset To-Do</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>오전 3시마다 리셋되는 todo-list</h1>
+            <button id="history-btn" title="기록 보기"><i class="fas fa-history"></i></button>
+        </header>
+
+        <div class="input-section">
+            <input type="text" id="todo-input" placeholder="할 일을 입력하고 엔터를 누르세요..." autocomplete="off">
+        </div>
+
+        <ul id="todo-list"></ul>
+    </div>
+
+    <div id="history-sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>지난 기록</h2>
+            <button id="close-sidebar">&times;</button>
+        </div>
+        <div id="history-content"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

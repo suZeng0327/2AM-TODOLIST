@@ -1,0 +1,120 @@
+:root {
+    --bg-color: #1e1e1e;
+    --card-bg: #252526;
+    --text-color: #d4d4d4;
+    --accent-color: #007acc;
+    --danger-color: #f44336;
+    --success-color: #4caf50;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    padding: 2rem;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+#todo-input {
+    width: 100%;
+    padding: 14px;
+    background: var(--card-bg);
+    border: 1px solid #3c3c3c;
+    color: white;
+    border-radius: 6px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    outline: none;
+}
+
+#todo-input:focus { border-color: var(--accent-color); }
+
+#todo-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 1.5rem;
+}
+
+.todo-item {
+    background: var(--card-bg);
+    margin-bottom: 8px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.todo-item.completed { opacity: 0.4; }
+
+/* 드래그 핸들 (☰) */
+.drag-handle {
+    cursor: grab;
+    color: #555;
+    padding: 0 12px 0 5px;
+}
+.drag-handle:active { cursor: grabbing; }
+
+.todo-item span {
+    flex-grow: 1;
+    cursor: pointer;
+    padding: 0 10px;
+}
+.todo-item.completed span { text-decoration: line-through; }
+
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #555;
+    transition: 0.2s;
+}
+
+.btn-pin.active { color: #ff9800; }
+.btn-delete:hover { color: var(--danger-color); }
+
+/* 드래그 애니메이션 관련 */
+.sortable-ghost { opacity: 0; } /* 이동할 자리를 비워둠 */
+.sortable-chosen { background: #333 !important; }
+
+/* 사이드바 */
+.sidebar {
+    position: fixed;
+    right: -400px;
+    top: 0;
+    width: 320px;
+    height: 100%;
+    background: #2d2d2d;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+    transition: 0.3s ease;
+    padding: 20px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+.sidebar.open { right: 0; }
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #444;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+#close-sidebar { font-size: 1.5rem; color: #fff; }
+.history-day { margin-bottom: 25px; border-bottom: 1px solid #444; padding-bottom: 15px; }
