@@ -8,6 +8,36 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <style>
+        /* 모바일 광고가 하단 항목을 가리지 않도록 여백 추가 */
+        body {
+            padding-bottom: 60px;
+        }
+        
+        /* 하단 고정 광고 컨테이너 스타일 */
+        .mobile-ad-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.1); /* 배경색은 디자인에 맞춰 조절 가능 */
+            z-index: 1000;
+            padding: 5px 0;
+        }
+
+        /* PC에서는 왼쪽 사이드바 광고만 보이게 하고 싶다면 (선택 사항) */
+        @media (min-width: 1024px) {
+            .mobile-ad-footer {
+                display: none;
+            }
+            body {
+                padding-bottom: 0;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="main-wrapper">
@@ -39,6 +69,14 @@
             <button id="close-sidebar">&times;</button>
         </div>
         <div id="history-content"></div>
+    </div>
+
+    <div class="mobile-ad-footer">
+        <ins class="kakao_ad_area" style="display:none;"
+            data-ad-unit = "DAN-7bH8nXutAy5zvauE"
+            data-ad-width = "320"
+            data-ad-height = "50"></ins>
+        <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
     </div>
 
     <script src="script.js"></script>
