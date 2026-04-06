@@ -9,12 +9,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <style>
-        /* 모바일 광고가 하단 항목을 가리지 않도록 여백 추가 */
+        /* 기본 모바일 설정: 하단 광고 여백 */
         body {
             padding-bottom: 60px;
         }
         
-        /* 하단 고정 광고 컨테이너 스타일 */
+        /* 모바일 하단 고정 배너 스타일 */
         .mobile-ad-footer {
             position: fixed;
             bottom: 0;
@@ -23,18 +23,34 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: rgba(0, 0, 0, 0.1); /* 배경색은 디자인에 맞춰 조절 가능 */
+            background-color: rgba(0, 0, 0, 0.05);
             z-index: 1000;
             padding: 5px 0;
         }
 
-        /* PC에서는 왼쪽 사이드바 광고만 보이게 하고 싶다면 (선택 사항) */
+        /* PC용 사이드바 광고 스타일 */
+        .ad-left {
+            display: none; /* 기본적으로는 숨김 (모바일 우선) */
+        }
+
+        /* PC 환경 (화면 너비 1024px 이상) */
         @media (min-width: 1024px) {
             .mobile-ad-footer {
-                display: none;
+                display: none; /* PC에서는 하단 배너 숨김 */
             }
             body {
-                padding-bottom: 0;
+                padding-bottom: 0; /* 하단 여백 제거 */
+            }
+            .ad-left {
+                display: block; /* PC에서만 왼쪽 사이드바 노출 */
+                position: fixed;
+                left: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            .main-wrapper {
+                display: flex;
+                justify-content: center;
             }
         }
     </style>
