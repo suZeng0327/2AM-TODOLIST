@@ -1,100 +1,587 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2AM Reset To-Do</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
-    <style>
-        /* 기본 모바일 설정: 하단 광고 여백 */
-        body {
-            padding-bottom: 60px;
-        }
-        
-        /* 모바일 하단 고정 배너 스타일 */
-        .mobile-ad-footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: rgba(0, 0, 0, 0.05);
-            z-index: 1000;
-            padding: 5px 0;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>영어 뜻 쓰기 | TTS 랜덤 퀴즈</title>
 
-        /* PC용 사이드바 광고 스타일 */
-        .ad-left {
-            display: none; /* 기본적으로는 숨김 (모바일 우선) */
-        }
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  
+  <style>
+    /* ✅ 레이아웃 수정한 부분: 광고 배치를 위한 전체 컨테이너 설정 */
+    body {
+      margin: 0;
+      background: #000;
+      color: var(--text);
+      font-family: var(--font);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      /* 모바일 광고가 내용을 가리지 않도록 하단 여백 추가 */
+      padding-bottom: 60px;
+    }
 
-        /* PC 환경 (화면 너비 1024px 이상) */
-        @media (min-width: 1024px) {
-            .mobile-ad-footer {
-                display: none; /* PC에서는 하단 배너 숨김 */
-            }
-            body {
-                padding-bottom: 0; /* 하단 여백 제거 */
-            }
-            .ad-left {
-                display: block; /* PC에서만 왼쪽 사이드바 노출 */
-                position: fixed;
-                left: 20px;
-                top: 50%;
-                transform: translateY(-50%);
-            }
-            .main-wrapper {
-                display: flex;
-                justify-content: center;
-            }
-        }
-    </style>
+    /* 광고와 본문을 감싸는 래퍼 */
+    .page-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      width: 100%;
+      max-width: 1600px; 
+      margin: 0 auto;
+      flex: 1;
+    }
+
+    /* 사이드 광고 영역 스타일 */
+    .side-ad {
+      width: 160px;
+      position: sticky;
+      top: 20px;
+      margin-top: 18px;
+      flex-shrink: 0;
+    }
+
+    /* 화면이 좁아지면 사이드 광고 숨김 */
+    @media (max-width: 1440px) {
+      .side-ad { display: none; }
+    }
+
+    /* ✅ 모바일 하단 고정 광고 스타일 추가 */
+    .mobile-fixed-ad {
+      display: none; /* 기본은 숨김 */
+    }
+
+    @media (max-width: 1023px) {
+      .mobile-fixed-ad {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        background: rgba(0, 0, 0, 0.85);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+      }
+    }
+
+    /* PC에서는 하단 여백 제거 */
+    @media (min-width: 1024px) {
+      body { padding-bottom: 0; }
+    }
+
+    /* 기존 main 스타일 유지 */
+    main {
+      flex: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 16px;
+    }
+
+    /* 하단 배너 스타일 유지 */
+    .bottom-banner {
+      position: static;
+      width: 100%;
+      background: rgba(0,0,0,.92);
+      border-top: 1px solid rgba(255,255,255,.12);
+    }
+
+    .bottom-banner__inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      text-align: center;
+      color: rgba(230,237,247,.92);
+      font-size: 13px;
+    }
+
+    .bottom-banner__link {
+      color: rgba(94,234,212,.95);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    /* --- 아래는 원본 스타일 그대로 복사됨 --- */
+    :root{
+      --bg:#000000;
+      --card:#121a2b;
+      --text:#e6edf7;
+      --muted:#a9b4c7;
+      --accent:#5eead4;
+      --accent2:#60a5fa;
+      --danger:#fb7185;
+      --line:rgba(255,255,255,.10);
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+      --radius:18px;
+      --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", "Apple SD Gothic Neo", Arial, "맑은 고딕", sans-serif;
+    }
+    *{box-sizing:border-box}
+    header{ padding:28px 18px 8px; max-width:1100px; margin:0 auto; }
+    .title{ display:flex; align-items:flex-end; gap:12px; flex-wrap:wrap; }
+    h1{ margin:0; font-size: clamp(22px, 3vw, 34px); letter-spacing:-.02em; }
+    .badge{ padding:6px 10px; border:1px solid var(--line); border-radius:999px; color:var(--muted); font-size:12px; background: rgba(255,255,255,.03); }
+    .sub{ margin:10px 0 0; color:var(--muted); line-height:1.5; font-size:14px; }
+    @media (max-width: 980px){ main{ grid-template-columns:1fr; } }
+    .card{ background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); border:1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow:hidden; }
+    .card .hd{ padding:16px 16px 10px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; gap:10px; background: rgba(0,0,0,.10); }
+    .card .hd h2{ margin:0; font-size:16px; letter-spacing:-.01em; }
+    .card .bd{ padding:16px; }
+    .row{ display:flex; gap:10px; flex-wrap:wrap; }
+    .row.nowrap{ flex-wrap:nowrap; }
+    .grow{ flex:1; }
+    label{ display:block; font-size:12px; color:var(--muted); margin:0 0 6px; }
+    input[type="text"], textarea, select{ width:100%; padding:12px 12px; border-radius: 12px; border:1px solid rgba(255,255,255,.14); background: rgba(10,14,25,.65); color:var(--text); outline:none; }
+    textarea{ min-height:88px; resize:vertical; }
+    input::placeholder, textarea::placeholder{ color: rgba(169,180,199,.65); }
+    .btn{ border:1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.06); color:var(--text); padding:10px 12px; border-radius:12px; cursor:pointer; transition:.15s ease; user-select:none; font-weight:600; letter-spacing:-.01em; white-space:nowrap; display:inline-flex; align-items:center; justify-content:center; gap:8px; }
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.08); }
+    .btn:active{ transform: translateY(0); }
+    .btn.primary{ border-color: rgba(94,234,212,.45); background: rgba(94,234,212,.14); }
+    .btn.blue{ border-color: rgba(96,165,250,.5); background: rgba(96,165,250,.14); }
+    .btn.danger{ border-color: rgba(251,113,133,.55); background: rgba(251,113,133,.14); }
+    .btn.ghost{ background: transparent; }
+    .btn.icon{ padding:10px 10px; width:42px; min-width:42px; }
+    .btn.icon span{ font-size:16px; line-height:1; }
+    .pill{ font-size:12px; color:var(--muted); padding:6px 10px; border:1px solid var(--line); border-radius:999px; background: rgba(255,255,255,.03); }
+    .list{ margin-top:12px; display:flex; flex-direction:column; gap:8px; max-height: 320px; overflow:auto; padding-right: 4px; }
+    .item{ display:flex; align-items:center; justify-content:space-between; gap:10px; border:1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.14); padding:10px 12px; border-radius: 14px; }
+    .item .txt{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+    .item .en{ font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .item .meta{ font-size:12px; color:var(--muted); }
+    .kpi{ display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; margin-top:10px; }
+    .kpi .box{ border:1px solid var(--line); background: rgba(255,255,255,.03); border-radius: 14px; padding:10px 12px; }
+    .kpi .box .n{ font-size:18px; font-weight:800; }
+    .kpi .box .t{ font-size:12px; color:var(--muted); margin-top:2px; }
+    .quizHero{ padding:14px 14px 12px; border-radius: 16px; border:1px solid var(--line); background: rgba(255,255,255,.03); }
+    .big{ font-size:14px; color:var(--muted); margin:0 0 8px; }
+    .reveal{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 12px; border-radius: 14px; border:1px dashed rgba(255,255,255,.18); background: rgba(10,14,25,.55); }
+    .reveal .mask{ font-weight:900; letter-spacing:.06em; opacity:.9; }
+    .reveal .word{ font-weight:900; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width: 100%; }
+    .note{ margin-top:12px; color:var(--muted); font-size:12px; line-height:1.5; }
+    .sep{ height:1px; background: var(--line); margin:14px 0; }
+    .toggle{ display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted); user-select:none; }
+    .toggle input{ transform: translateY(1px); }
+    .history{ margin-top:12px; border:1px solid var(--line); border-radius: 14px; background: rgba(0,0,0,.12); overflow:hidden; }
+    .history .hh{ padding:10px 12px; display:flex; justify-content:space-between; align-items:center; gap:10px; border-bottom:1px solid var(--line); background: rgba(255,255,255,.03); }
+    .history .hh .t{ font-weight:800; font-size:13px; }
+    .history .hb{ max-height: 220px; overflow:auto; }
+    .log{ padding:10px 12px; border-top:1px solid rgba(255,255,255,.08); display:flex; flex-direction:column; gap:2px; }
+    .log:first-child{ border-top:0; }
+    .log .a{ font-size:13px; font-weight:800; }
+    .log .b{ font-size:12px; color:var(--muted); }
+    .warn{ border:1px solid rgba(251,191,36,.35); background: rgba(251,191,36,.10); color: #fde68a; padding:10px 12px; border-radius: 14px; font-size:13px; line-height:1.45; }
+  </style>
 </head>
 <body>
-    <div class="main-wrapper">
-        <aside class="ad-left">
-            <ins class="kakao_ad_area" style="display:none;"
-                data-ad-unit = "DAN-Ck2vDHjlCh92YiMx"
-                data-ad-width = "160"
-                data-ad-height = "600"></ins>
-            <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
-        </aside>
-
-        <div class="container">
-            <header>
-                <h1>새벽2시마다 리셋되는 todo-list</h1>
-                <button id="history-btn" title="기록 보기"><i class="fas fa-history"></i></button>
-            </header>
-
-            <div class="input-section">
-                <input type="text" id="todo-input" placeholder="할 일을 입력하고 엔터를 누르세요..." autocomplete="off">
-            </div>
-
-            <ul id="todo-list"></ul>
-        </div>
+  <header>
+    <div class="title">
+      <h1>영어 뜻 쓰기 (TTS 랜덤 퀴즈)</h1>
+      <span class="badge">HTML · CSS · JS / Web Speech API</span>
+      <span class="badge" id="saveBadge">자동 저장: ON</span>
     </div>
+    <p class="sub">
+      단어/문구를 추가한 뒤 <b>시작</b>을 누르면 랜덤 항목의 <b>영어 TTS</b>가 재생됩니다.
+      소리를 듣고 한국어 뜻을 적고 <b>Enter</b>로 다음으로 넘어가세요. (Shift+Enter=줄바꿈)
+    </p>
+  </header>
 
-    <div id="history-sidebar" class="sidebar">
-        <div class="sidebar-header">
-            <h2>지난 기록</h2>
-            <button id="close-sidebar">&times;</button>
-        </div>
-        <div id="history-content"></div>
-    </div>
-
-    <div class="mobile-ad-footer">
+  <div class="page-wrapper">
+    
+    <aside class="side-ad" style="margin-right: 20px;">
         <ins class="kakao_ad_area" style="display:none;"
-            data-ad-unit = "DAN-7bH8nXutAy5zvauE"
-            data-ad-width = "320"
-            data-ad-height = "50"></ins>
+             data-ad-unit = "DAN-7x09MvZo5UnHE03x"
+             data-ad-width = "160"
+             data-ad-height = "600"></ins>
         <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
-    </div>
+    </aside>
 
-    <script src="script.js"></script>
+    <main>
+      <section class="card">
+        <div class="hd">
+          <h2>단어/문구 추가</h2>
+          <div class="row">
+            <button class="btn ghost" id="btnExport" title="JSON으로 내보내기">내보내기</button>
+            <button class="btn ghost" id="btnImport" title="JSON 가져오기">가져오기</button>
+            <button class="btn danger" id="btnClearAll" title="전체 삭제">전체삭제</button>
+          </div>
+        </div>
+        <div class="bd">
+          <div class="row nowrap">
+            <div class="grow">
+              <label for="enInput">영어 단어/문구</label>
+              <input id="enInput" type="text" placeholder="예: take it for granted / significant / on the other hand" />
+            </div>
+            <div style="width:160px">
+              <label>&nbsp;</label>
+              <button class="btn primary" id="btnAdd" style="width:100%">추가</button>
+            </div>
+          </div>
+          <div class="kpi">
+            <div class="box"><div class="n" id="kpiCount">0</div><div class="t">등록된 항목</div></div>
+            <div class="box"><div class="n" id="kpiQueue">0</div><div class="t">남은(중복방지 모드)</div></div>
+            <div class="box"><div class="n" id="kpiDone">0</div><div class="t">이번 라운드 진행</div></div>
+          </div>
+          <div class="sep"></div>
+          <div class="row" style="align-items:center; justify-content:space-between;">
+            <div class="toggle"><input type="checkbox" id="chkNoRepeat" checked /><label for="chkNoRepeat" style="margin:0">중복 방지(한 바퀴 돌기)</label></div>
+            <span class="pill" id="listHint">목록은 자동 저장됩니다</span>
+          </div>
+          <div class="list" id="list"></div>
+          <div class="note">목록의 📋 버튼을 누르면 해당 단어/문구가 복사됩니다.</div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="hd">
+          <h2>퀴즈</h2>
+          <div class="row">
+            <button class="btn blue" id="btnStart">시작</button>
+            <button class="btn" id="btnReplay" disabled>다시듣기</button>
+            <button class="btn primary" id="btnNext" disabled>다음</button>
+          </div>
+        </div>
+        <div class="bd">
+          <div class="warn" id="ttsWarn" style="display:none; margin-bottom:12px;">이 브라우저에서 TTS 목소리 로딩이 늦을 수 있어요. 잠시 후 다시 시도하거나 Chrome에서 실행해 보세요.</div>
+          <div class="quizHero">
+            <p class="big">지금 문제</p>
+            <div class="reveal">
+              <div class="grow" style="min-width:0;">
+                <div class="mask" id="maskText">S P E A K I N G …</div>
+                <div class="word" id="revealWord" style="display:none;"></div>
+              </div>
+              <button class="btn" id="btnReveal" disabled>영어 보기</button>
+            </div>
+            <div class="sep"></div>
+            <div class="row">
+              <div class="grow">
+                <label for="koInput">한국어 뜻 (Enter = 다음 / Shift+Enter = 줄바꿈)</label>
+                <textarea id="koInput" placeholder="소리를 듣고 뜻을 한국어로 적으세요."></textarea>
+              </div>
+            </div>
+            <div class="row" style="align-items:center; justify-content:space-between; margin-top:10px;">
+              <div class="toggle"><input type="checkbox" id="chkAutoSpeak" checked /><label for="chkAutoSpeak" style="margin:0">다음 문제 자동으로 읽기</label></div>
+              <span class="pill" id="roundInfo">대기중</span>
+            </div>
+          </div>
+          <div class="sep"></div>
+          <div class="row">
+            <div class="grow"><label for="voiceSelect">영어 TTS 목소리 선택</label><select id="voiceSelect"><option value="">(로딩중...)</option></select></div>
+            <div style="width:140px"><label for="rate">속도</label><input id="rate" type="text" inputmode="decimal" placeholder="1.0" value="1.0" /></div>
+            <div style="width:140px"><label for="pitch">피치</label><input id="pitch" type="text" inputmode="decimal" placeholder="1.0" value="1.0" /></div>
+          </div>
+          <div class="history">
+            <div class="hh"><div class="t">작성 기록(최근)</div><button class="btn ghost" id="btnClearHistory">기록삭제</button></div>
+            <div class="hb" id="history"></div>
+          </div>
+          <div class="note">Enter로 넘기면 입력칸은 자동으로 비워지고, 작성 기록에는 저장됩니다.</div>
+        </div>
+      </section>
+    </main>
+
+    <aside class="side-ad" style="margin-left: 20px;"></aside>
+
+  </div> 
+
+  <div class="mobile-fixed-ad">
+    <ins class="kakao_ad_area" style="display:none;"
+      data-ad-unit = "DAN-FAph8FfCJUoT3rtg"
+      data-ad-width = "320"
+      data-ad-height = "50"></ins>
+    <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
+  </div>
+
+  <script>
+    (() => {
+      const LS_WORDS = "tts_words_v1";
+      const LS_HISTORY = "tts_history_v1";
+      const LS_SETTINGS = "tts_settings_v1";
+
+      const $ = (id) => document.getElementById(id);
+
+      const state = {
+        words: [], history: [], queue: [], current: null,
+        roundTotal: 0, roundDone: 0, voices: [], voiceReady: false
+      };
+
+      const enInput = $("enInput"), btnAdd = $("btnAdd"), listEl = $("list");
+      const kpiCount = $("kpiCount"), kpiQueue = $("kpiQueue"), kpiDone = $("kpiDone");
+      const chkNoRepeat = $("chkNoRepeat"), btnClearAll = $("btnClearAll"), btnExport = $("btnExport"), btnImport = $("btnImport");
+      const btnStart = $("btnStart"), btnReplay = $("btnReplay"), btnNext = $("btnNext"), btnReveal = $("btnReveal");
+      const maskText = $("maskText"), revealWord = $("revealWord"), koInput = $("koInput"), chkAutoSpeak = $("chkAutoSpeak"), roundInfo = $("roundInfo");
+      const voiceSelect = $("voiceSelect"), rateInput = $("rate"), pitchInput = $("pitch"), ttsWarn = $("ttsWarn");
+      const historyEl = $("history"), btnClearHistory = $("btnClearHistory");
+
+      const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+      const nowStr = () => new Date().toLocaleString();
+
+      function escapeHtml(s){
+        return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+      }
+
+      function clampNumber(v, min, max, fallback){
+        const n = Number(v);
+        if (!Number.isFinite(n)) return fallback;
+        return Math.min(max, Math.max(min, n));
+      }
+
+      function isEnglishVoice(voice){
+        const lang = (voice.lang || "").toLowerCase();
+        return lang.startsWith("en-") || lang === "en";
+      }
+
+      function chooseDefaultVoice(voices){
+        const preferNames = ["Google US English", "Google UK English Female", "Google UK English Male", "Microsoft Aria Online (Natural)", "Microsoft Guy Online (Natural)", "Samantha", "Alex"];
+        const enVoices = voices.filter(isEnglishVoice);
+        if (!enVoices.length) return null;
+        for (const name of preferNames){
+          const found = enVoices.find(v => v.name === name);
+          if (found) return found;
+        }
+        const enUS = enVoices.find(v => (v.lang || "").toLowerCase().startsWith("en-us"));
+        return enUS || enVoices[0];
+      }
+
+      function saveAll(){
+        localStorage.setItem(LS_WORDS, JSON.stringify(state.words));
+        localStorage.setItem(LS_HISTORY, JSON.stringify(state.history));
+        localStorage.setItem(LS_SETTINGS, JSON.stringify({
+          noRepeat: chkNoRepeat.checked, autoSpeak: chkAutoSpeak.checked,
+          voiceURI: voiceSelect.value || "", rate: rateInput.value, pitch: pitchInput.value
+        }));
+      }
+
+      function loadAll(){
+        try{
+          state.words = JSON.parse(localStorage.getItem(LS_WORDS) || "[]");
+          state.history = JSON.parse(localStorage.getItem(LS_HISTORY) || "[]");
+          const s = JSON.parse(localStorage.getItem(LS_SETTINGS) || "{}");
+          if (typeof s.noRepeat === "boolean") chkNoRepeat.checked = s.noRepeat;
+          if (typeof s.autoSpeak === "boolean") chkAutoSpeak.checked = s.autoSpeak;
+          if (typeof s.rate === "string") rateInput.value = s.rate;
+          if (typeof s.pitch === "string") pitchInput.value = s.pitch;
+          state._preferredVoiceURI = s.voiceURI || "";
+        }catch(e){ console.warn(e); }
+      }
+
+      function flashPill(msg){
+        const el = $("listHint");
+        const old = el.textContent;
+        el.textContent = msg;
+        el.style.borderColor = "rgba(94,234,212,.45)";
+        el.style.color = "#c7fffb";
+        setTimeout(() => { el.textContent = old; el.style.borderColor = ""; el.style.color = ""; }, 900);
+      }
+
+      async function copyToClipboard(text){
+        try{
+          if (navigator.clipboard && window.isSecureContext){
+            await navigator.clipboard.writeText(text);
+          }else{
+            const ta = document.createElement("textarea");
+            ta.value = text; ta.style.position = "fixed"; ta.style.left = "-9999px"; ta.style.top = "-9999px";
+            document.body.appendChild(ta); ta.focus(); ta.select(); document.execCommand("copy"); ta.remove();
+          }
+          flashPill("복사됨!");
+        }catch(e){ alert("복사 실패"); }
+      }
+
+      function refreshKPIs(){
+        kpiCount.textContent = state.words.length;
+        kpiQueue.textContent = chkNoRepeat.checked ? state.queue.length : state.words.length;
+        kpiDone.textContent = state.roundDone;
+      }
+
+      function renderList(){
+        listEl.innerHTML = "";
+        if (!state.words.length){
+          listEl.innerHTML = `<div class="pill">아직 항목이 없습니다.</div>`;
+          return;
+        }
+        state.words.forEach((w, idx) => {
+          const div = document.createElement("div");
+          div.className = "item";
+          div.innerHTML = `
+            <div class="txt"><div class="en" title="${escapeHtml(w.text)}">${escapeHtml(w.text)}</div><div class="meta">#${idx+1}</div></div>
+            <div class="row">
+              <button class="btn icon" data-act="copy" data-id="${w.id}"><span>📋</span></button>
+              <button class="btn icon" data-act="speak" data-id="${w.id}"><span>🔊</span></button>
+              <button class="btn danger" data-act="del" data-id="${w.id}">삭제</button>
+            </div>`;
+          listEl.appendChild(div);
+        });
+      }
+
+      function renderHistory(){
+        historyEl.innerHTML = "";
+        if (!state.history.length){
+          historyEl.innerHTML = `<div class="log"><div class="b">기록 없음</div></div>`;
+          return;
+        }
+        state.history.slice(0, 30).forEach(h => {
+          const div = document.createElement("div");
+          div.className = "log";
+          div.innerHTML = `<div class="a">${escapeHtml(h.ko || "(빈칸)")}</div><div class="b">영어: ${escapeHtml(h.en)} · ${escapeHtml(h.time)}</div>`;
+          historyEl.appendChild(div);
+        });
+      }
+
+      function addWord(text){
+        const t = (text || "").trim();
+        if (!t) return;
+        if (state.words.some(w => w.text.toLowerCase() === t.toLowerCase())){ flashPill("이미 있음"); return; }
+        state.words.unshift({ id: uid(), text: t });
+        rebuildQueue(); renderList(); refreshKPIs(); saveAll();
+      }
+
+      function deleteWord(id){
+        state.words = state.words.filter(w => w.id !== id);
+        if (state.current && state.current.id === id) state.current = null;
+        rebuildQueue(); renderList(); refreshKPIs(); saveAll();
+      }
+
+      function rebuildQueue(){
+        if (!chkNoRepeat.checked){ state.queue = []; return; }
+        const arr = [...state.words];
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        state.queue = arr; state.roundTotal = arr.length; state.roundDone = 0;
+      }
+
+      function pickNext(){
+        if (!state.words.length) return null;
+        if (chkNoRepeat.checked){
+          if (!state.queue.length) rebuildQueue();
+          const next = state.queue.shift();
+          state.roundDone++; return next;
+        }else{
+          let next = state.words[Math.floor(Math.random() * state.words.length)];
+          state.roundTotal = state.words.length; state.roundDone++; return next;
+        }
+      }
+
+      function loadVoices(){
+        return new Promise((resolve) => {
+          let tries = 0;
+          function attempt(){
+            const voices = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+            if (voices && voices.length) resolve(voices);
+            else if (tries < 20) { tries++; setTimeout(attempt, 150); }
+            else resolve([]);
+          }
+          attempt();
+        });
+      }
+
+      function renderVoices(voices){
+        state.voices = voices.filter(isEnglishVoice);
+        voiceSelect.innerHTML = "";
+        if (!state.voices.length){
+          const opt = document.createElement("option"); opt.value = ""; opt.textContent = "음성 없음";
+          voiceSelect.appendChild(opt); ttsWarn.style.display = "block"; return;
+        }
+        const def = chooseDefaultVoice(state.voices);
+        state.voices.forEach(v => {
+          const opt = document.createElement("option"); opt.value = v.voiceURI; opt.textContent = `${v.name} (${v.lang})`;
+          voiceSelect.appendChild(opt);
+        });
+        if (state._preferredVoiceURI && state.voices.some(v => v.voiceURI === state._preferredVoiceURI)) voiceSelect.value = state._preferredVoiceURI;
+        else if (def) voiceSelect.value = def.voiceURI;
+        state.voiceReady = true;
+      }
+
+      function speak(text){
+        if (!window.speechSynthesis || !text) return;
+        const rate = clampNumber(rateInput.value, 0.5, 1.6, 1.0);
+        const pitch = clampNumber(pitchInput.value, 0.5, 1.8, 1.0);
+        const selectedVoice = state.voices.find(v => v.voiceURI === voiceSelect.value) || null;
+        const doSpeak = () => {
+          try { speechSynthesis.resume(); } catch(e) {}
+          speechSynthesis.cancel();
+          const u = new SpeechSynthesisUtterance(text);
+          u.rate = rate; u.pitch = pitch; u.volume = 1.0; u.lang = "en-US";
+          if (selectedVoice) u.voice = selectedVoice;
+          maskText.textContent = "S P E A K I N G …";
+          u.onend = () => { maskText.textContent = "재생 완료. 뜻을 적으세요."; koInput.focus(); };
+          speechSynthesis.speak(u);
+        };
+        doSpeak();
+        setTimeout(() => { if (!speechSynthesis.speaking && !speechSynthesis.pending){ doSpeak(); } }, 120);
+      }
+
+      function setQuizEnabled(on){ btnReplay.disabled = btnNext.disabled = btnReveal.disabled = koInput.disabled = !on; }
+      function updateRoundInfo(){
+        if (!state.words.length) { roundInfo.textContent = "대기중"; return; }
+        roundInfo.textContent = chkNoRepeat.checked ? `라운드: ${state.roundDone}/${state.roundTotal}` : `진행: ${state.roundDone}`;
+      }
+
+      function startQuiz(){
+        if (!state.words.length) { alert("단어를 추가하세요."); return; }
+        state.roundDone = 0; rebuildQueue(); setQuizEnabled(true); nextQuestion(true);
+      }
+
+      function nextQuestion(isFirst=false){
+        if (!isFirst && state.current){
+          state.history.unshift({ en: state.current.text, ko: (koInput.value || "").trim(), time: nowStr() });
+          state.history = state.history.slice(0, 200); saveAll(); renderHistory();
+        }
+        const nxt = pickNext();
+        if (!nxt) return;
+        state.current = nxt; koInput.value = ""; revealWord.style.display = "none";
+        revealWord.textContent = nxt.text; maskText.textContent = "🔊 소리를 들으세요.";
+        updateRoundInfo(); refreshKPIs(); koInput.focus(); speak(nxt.text);
+      }
+
+      // Events
+      btnAdd.onclick = () => { addWord(enInput.value); enInput.value = ""; enInput.focus(); };
+      enInput.onkeydown = (e) => { if(e.key === "Enter") btnAdd.click(); };
+      listEl.onclick = async (e) => {
+        const btn = e.target.closest("button"); if (!btn) return;
+        const id = btn.dataset.id, act = btn.dataset.act, w = state.words.find(x => x.id === id);
+        if (act === "del") deleteWord(id); else if (act === "speak" && w) speak(w.text); else if (act === "copy" && w) await copyToClipboard(w.text);
+      };
+      chkNoRepeat.onchange = () => { rebuildQueue(); refreshKPIs(); updateRoundInfo(); saveAll(); };
+      chkAutoSpeak.onchange = voiceSelect.onchange = rateInput.onchange = pitchInput.onchange = saveAll;
+      btnStart.onclick = startQuiz;
+      btnReplay.onclick = () => state.current && speak(state.current.text);
+      btnNext.onclick = () => nextQuestion(false);
+      btnReveal.onclick = () => { if(state.current) revealWord.style.display = (revealWord.style.display === "none") ? "block" : "none"; };
+      koInput.onkeydown = (e) => { if (e.key === "Enter" && !e.shiftKey){ e.preventDefault(); if(!btnNext.disabled) nextQuestion(false); } };
+      btnClearAll.onclick = () => { if(confirm("삭제?")) { state.words=[]; state.queue=[]; state.current=null; renderList(); refreshKPIs(); updateRoundInfo(); setQuizEnabled(false); saveAll(); } };
+      btnClearHistory.onclick = () => { if(confirm("기록삭제?")) { state.history=[]; renderHistory(); saveAll(); } };
+      btnExport.onclick = () => {
+        const blob = new Blob([JSON.stringify({words: state.words}, null, 2)], {type:"application/json"});
+        const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = "words.json"; a.click(); URL.revokeObjectURL(url);
+      };
+      btnImport.onclick = () => {
+        const input = document.createElement("input"); input.type = "file"; input.accept = "application/json";
+        input.onchange = async () => {
+          try {
+            const text = await input.files[0].text(); const json = JSON.parse(text);
+            state.words = [...(json.words || []), ...state.words].filter((v,i,a)=>a.findIndex(t=>t.text.toLowerCase()===v.text.toLowerCase())===i);
+            rebuildQueue(); renderList(); refreshKPIs(); updateRoundInfo(); saveAll(); flashPill("완료");
+          } catch(e) { alert("실패"); }
+        }; input.click();
+      };
+
+      // Init
+      loadAll(); renderList(); renderHistory(); rebuildQueue(); refreshKPIs(); updateRoundInfo(); setQuizEnabled(false);
+      if (window.speechSynthesis) speechSynthesis.onvoiceschanged = async () => renderVoices(await loadVoices());
+      (async () => renderVoices(await loadVoices()))();
+    })();
+  </script>
+
+  <footer class="bottom-banner">
+    <div class="bottom-banner__inner">
+      영수증 지음<br />
+      <a class="bottom-banner__link" href="mailto:sunghoonjo123@naver.com">sunghoonjo123@naver.com</a>
+    </div>
+  </footer>
 </body>
 </html>
