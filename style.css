@@ -36,12 +36,14 @@ body {
     max-width: 800px; 
 }
 
+/* --- [수정] 모바일 화면 상단 여백 확보 --- */
 @media (max-width: 850px) {
     .ad-left {
         display: none;
     }
     .main-wrapper {
-        padding: 0 1rem;
+        /* 상단(top) 여백을 3rem으로 늘려 2번째 사진처럼 공백 확보 */
+        padding: 3rem 1rem 0 1rem; 
     }
     .container {
         max-width: 100%;
@@ -141,7 +143,6 @@ button {
 .btn-pin.active { color: #ff9800; }
 .btn-delete:hover { color: var(--danger-color); }
 
-/* --- [수정] 사이드바 및 헤더 정렬 --- */
 .sidebar {
     position: fixed;
     right: -400px;
@@ -160,7 +161,7 @@ button {
 
 .sidebar-header {
     display: flex;
-    flex-direction: row-reverse; /* X 버튼을 왼쪽, 텍스트를 오른쪽으로 */
+    flex-direction: row-reverse;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #444;
@@ -175,7 +176,7 @@ button {
 }
 
 #close-sidebar {
-    font-size: 1.8rem; /* X 버튼을 더 잘 보이게 키움 */
+    font-size: 1.8rem;
     color: #fff;
     padding: 5px;
     line-height: 1;
