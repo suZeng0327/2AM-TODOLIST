@@ -36,17 +36,21 @@ body {
     max-width: 800px; 
 }
 
-/* --- [수정] 모바일 화면 상단 여백 확보 --- */
+/* --- [수정] 모바일/앱 화면에서 상단 여백을 강제로 아래로 밀기 --- */
 @media (max-width: 850px) {
     .ad-left {
         display: none;
     }
     .main-wrapper {
-        /* 상단(top) 여백을 3rem으로 늘려 2번째 사진처럼 공백 확보 */
-        padding: 3rem 1rem 0 1rem; 
+        /* 상단 여백을 60px로 확실히 줘서 카메라 구멍 아래로 배치 */
+        padding-top: 60px !important; 
+        padding-left: 1rem;
+        padding-right: 1rem;
+        display: block; /* 모바일에서 정렬 안정화 */
     }
     .container {
         max-width: 100%;
+        margin: 0 auto;
     }
 }
 
@@ -143,6 +147,7 @@ button {
 .btn-pin.active { color: #ff9800; }
 .btn-delete:hover { color: var(--danger-color); }
 
+/* --- [수정] 사이드바 버튼 위치 조정 --- */
 .sidebar {
     position: fixed;
     right: -400px;
@@ -161,7 +166,6 @@ button {
 
 .sidebar-header {
     display: flex;
-    flex-direction: row-reverse;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #444;
@@ -173,13 +177,15 @@ button {
     margin: 0;
     font-size: 1.5rem;
     color: #fff;
+    order: 2; /* 텍스트는 오른쪽 */
 }
 
 #close-sidebar {
-    font-size: 1.8rem;
+    font-size: 2rem;
     color: #fff;
     padding: 5px;
     line-height: 1;
+    order: 1; /* X 버튼은 왼쪽 */
 }
 
 .history-day { margin-bottom: 25px; border-bottom: 1px solid #444; padding-bottom: 15px; }
