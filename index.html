@@ -1,41 +1,21 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta name="naver-site-verification" content="네이버_인증_코드_넣는_곳" />
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="description" content="매일 새벽 2시마다 자동으로 초기화되는 효율적인 할일 관리 리스트입니다. 하루의 계획을 매일 새롭게 시작하세요.">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>새벽 2시 리셋 할일 리스트 - 자동 초기화 TodoList</title>
-    
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
-    
     <style>
-        /* 기본 모바일 설정: 하단 광고 여백 및 상단 안전 영역 확보 */
+        /* 기본 모바일 설정: 하단 광고 여백 */
         body {
             padding-bottom: 60px;
-            margin: 0;
         }
 
-        /* [추가] 모바일/앱 환경에서 상단 카메라 구멍 및 상태바 가림 방지 */
-        .main-wrapper {
-            padding-top: env(safe-area-inset-top, 60px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        @media (max-width: 850px) {
-            .main-wrapper {
-                /* 앱 화면에서 제목이 잘리지 않도록 여백을 충분히 확보 */
-                padding-top: 80px; 
-            }
-        }
-        
         /* 모바일 하단 고정 배너 스타일 */
         .mobile-ad-footer {
             position: fixed;
@@ -48,24 +28,25 @@
             background-color: rgba(0, 0, 0, 0.05);
             z-index: 1000;
             padding: 5px 0;
-            padding-bottom: env(safe-area-inset-bottom, 5px);
         }
 
         /* PC용 사이드바 광고 스타일 */
         .ad-left {
-            display: none;
+            display: none; /* 기본적으로는 숨김 (모바일 우선) */
         }
+
+
 
         /* PC 환경 (화면 너비 1024px 이상) */
         @media (min-width: 1024px) {
             .mobile-ad-footer {
-                display: none;
+                display: none; /* PC에서는 하단 배너 숨김 */
             }
             body {
-                padding-bottom: 0;
+                padding-bottom: 0; /* 하단 여백 제거 */
             }
             .ad-left {
-                display: block;
+                display: block; /* PC에서만 왼쪽 사이드바 노출 */
                 position: fixed;
                 left: 20px;
                 top: 50%;
@@ -73,13 +54,12 @@
             }
             .main-wrapper {
                 display: flex;
-                flex-direction: row;
                 justify-content: center;
-                padding-top: 50px;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="main-wrapper">
         <aside class="ad-left">
@@ -87,6 +67,7 @@
                 data-ad-unit = "DAN-Ck2vDHjlCh92YiMx"
                 data-ad-width = "160"
                 data-ad-height = "600"></ins>
+            <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
         </aside>
 
         <div class="container">
@@ -116,10 +97,11 @@
             data-ad-unit = "DAN-7bH8nXutAy5zvauE"
             data-ad-width = "320"
             data-ad-height = "50"></ins>
+        <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
     </div>
 
-    <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
-    
     <script src="script.js"></script>
+
 </body>
+
 </html>
